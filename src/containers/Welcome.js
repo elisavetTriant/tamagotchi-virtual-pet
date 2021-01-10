@@ -70,10 +70,7 @@ export default function Welcome() {
     event.preventDefault()
 
     if (nameValue !== '') {
-      history.push({
-             pathname: '/play',
-             state: { data: nameValue }
-         });
+      history.push('/play/' + nameValue);
     }
   }  
 
@@ -88,7 +85,7 @@ export default function Welcome() {
           <Typography component="h1" variant="h5">
             Start your game by giving your pet a name!
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit} method="post">
+          <form className={classes.form} onSubmit={handleSubmit} method="post">
             <TextField
               variant="outlined"
               margin="normal"
