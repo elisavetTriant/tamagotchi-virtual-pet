@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/tamagotchi-virtual-pet/static/js/main.01e8fd18.chunk.js",
+    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.01e8fd18.chunk.js.map",
+    "runtime-main.js": "/tamagotchi-virtual-pet/static/js/runtime-main.061d8b8d.js",
+    "runtime-main.js.map": "/tamagotchi-virtual-pet/static/js/runtime-main.061d8b8d.js.map",
+    "static/js/2.142ab5e1.chunk.js": "/tamagotchi-virtual-pet/static/js/2.142ab5e1.chunk.js",
+    "static/js/2.142ab5e1.chunk.js.map": "/tamagotchi-virtual-pet/static/js/2.142ab5e1.chunk.js.map",
+    "static/js/3.9cc46164.chunk.js": "/tamagotchi-virtual-pet/static/js/3.9cc46164.chunk.js",
+    "static/js/3.9cc46164.chunk.js.map": "/tamagotchi-virtual-pet/static/js/3.9cc46164.chunk.js.map",
+    "index.html": "/tamagotchi-virtual-pet/index.html",
+    "static/js/2.142ab5e1.chunk.js.LICENSE.txt": "/tamagotchi-virtual-pet/static/js/2.142ab5e1.chunk.js.LICENSE.txt",
+    "static/media/welcome-pet.3b345dac.svg": "/tamagotchi-virtual-pet/static/media/welcome-pet.3b345dac.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.061d8b8d.js",
+    "static/js/2.142ab5e1.chunk.js",
+    "static/js/main.01e8fd18.chunk.js"
+  ]
+}
