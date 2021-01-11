@@ -1,20 +1,30 @@
 {
   "files": {
-    "main.js": "/tamagotchi-virtual-pet/static/js/main.01e8fd18.chunk.js",
-    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.01e8fd18.chunk.js.map",
-    "runtime-main.js": "/tamagotchi-virtual-pet/static/js/runtime-main.061d8b8d.js",
-    "runtime-main.js.map": "/tamagotchi-virtual-pet/static/js/runtime-main.061d8b8d.js.map",
-    "static/js/2.142ab5e1.chunk.js": "/tamagotchi-virtual-pet/static/js/2.142ab5e1.chunk.js",
-    "static/js/2.142ab5e1.chunk.js.map": "/tamagotchi-virtual-pet/static/js/2.142ab5e1.chunk.js.map",
-    "static/js/3.9cc46164.chunk.js": "/tamagotchi-virtual-pet/static/js/3.9cc46164.chunk.js",
-    "static/js/3.9cc46164.chunk.js.map": "/tamagotchi-virtual-pet/static/js/3.9cc46164.chunk.js.map",
+    "main.js": "/tamagotchi-virtual-pet/static/js/main.9f650593.chunk.js",
+    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.9f650593.chunk.js.map",
+    "runtime-main.js": "/tamagotchi-virtual-pet/static/js/runtime-main.6fe98d80.js",
+    "runtime-main.js.map": "/tamagotchi-virtual-pet/static/js/runtime-main.6fe98d80.js.map",
+    "static/js/2.9309dfaa.chunk.js": "/tamagotchi-virtual-pet/static/js/2.9309dfaa.chunk.js",
+    "static/js/2.9309dfaa.chunk.js.map": "/tamagotchi-virtual-pet/static/js/2.9309dfaa.chunk.js.map",
+    "static/js/3.34f8ee21.chunk.js": "/tamagotchi-virtual-pet/static/js/3.34f8ee21.chunk.js",
+    "static/js/3.34f8ee21.chunk.js.map": "/tamagotchi-virtual-pet/static/js/3.34f8ee21.chunk.js.map",
     "index.html": "/tamagotchi-virtual-pet/index.html",
-    "static/js/2.142ab5e1.chunk.js.LICENSE.txt": "/tamagotchi-virtual-pet/static/js/2.142ab5e1.chunk.js.LICENSE.txt",
+    "static/js/2.9309dfaa.chunk.js.LICENSE.txt": "/tamagotchi-virtual-pet/static/js/2.9309dfaa.chunk.js.LICENSE.txt",
+    "static/media/born-pet.153e1bf9.svg": "/tamagotchi-virtual-pet/static/media/born-pet.153e1bf9.svg",
+    "static/media/dead-pet.a5c7f1b5.svg": "/tamagotchi-virtual-pet/static/media/dead-pet.a5c7f1b5.svg",
+    "static/media/disaster-pet.4ece71f2.svg": "/tamagotchi-virtual-pet/static/media/disaster-pet.4ece71f2.svg",
+    "static/media/exercise-pet.c3b2a3b4.svg": "/tamagotchi-virtual-pet/static/media/exercise-pet.c3b2a3b4.svg",
+    "static/media/food-pet.886e478e.svg": "/tamagotchi-virtual-pet/static/media/food-pet.886e478e.svg",
+    "static/media/happy-pet.0073bfbc.svg": "/tamagotchi-virtual-pet/static/media/happy-pet.0073bfbc.svg",
+    "static/media/mischief-pet.e1412e66.svg": "/tamagotchi-virtual-pet/static/media/mischief-pet.e1412e66.svg",
+    "static/media/sad-pet.746e9375.svg": "/tamagotchi-virtual-pet/static/media/sad-pet.746e9375.svg",
+    "static/media/sick-pet.f617f147.svg": "/tamagotchi-virtual-pet/static/media/sick-pet.f617f147.svg",
+    "static/media/tricks-pet.c92e9531.svg": "/tamagotchi-virtual-pet/static/media/tricks-pet.c92e9531.svg",
     "static/media/welcome-pet.3b345dac.svg": "/tamagotchi-virtual-pet/static/media/welcome-pet.3b345dac.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.061d8b8d.js",
-    "static/js/2.142ab5e1.chunk.js",
-    "static/js/main.01e8fd18.chunk.js"
+    "static/js/runtime-main.6fe98d80.js",
+    "static/js/2.9309dfaa.chunk.js",
+    "static/js/main.9f650593.chunk.js"
   ]
 }
