@@ -1,21 +1,21 @@
-import welcomePet from '../assets/character/welcome-pet.svg';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {useParams} from 'react-router-dom';
 import {accurateInterval} from '../utils/helpers.js';
+import Copyright from '../components/Copyright';
+import Character from '../components/Character';
+import LinearProgressWithLabel from '../components/LinearProgressWithLabel';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { StaticBanner } from 'material-ui-banner';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,46 +29,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     margin: '2rem auto',
     maxWidth: 680,
-  },
-  image: {
-    width: 128,
-    height: 128,
-  },
-  img: {
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-  },
+  }
   }));
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="#">
-        Tamagotchi Inspired Virtual Pet Game
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-function LinearProgressWithLabel(props) {
-  return (
-    <Box display="flex" alignItems="center">
-      <Box width="100%" mr={1}>
-        <LinearProgress variant="determinate" {...props} />
-      </Box>
-      <Box minWidth={35}>
-        <Typography variant="body2" color="textSecondary">{`${Math.round(
-          props.value,
-        )}%`}</Typography>
-      </Box>
-    </Box>
-  );
-}
 
 export default function App() {
 
@@ -79,7 +42,9 @@ const [hunger, setHunger] = useState(0);
 const [happiness, setHappiness] = useState(100);
 const [gameEnd, setGameEnd] = useState(false);
 const [dialogOpen, setDialogOpen] = useState(false);
+const [bannerOpen, setBannerOpen] = useState(false);
 const timeoutRef = useRef();
+const eventTimeoutRef = useRef();
 const {petName} = useParams();
 const classes = useStyles();
 
@@ -89,7 +54,34 @@ const classes = useStyles();
           petDay();
         }, 1000) //TODO: Updatable day time - defaults to 1 sec 
     timeoutRef.current = timeOutInfo;
+    //console.log(timeoutRef.current)
  }
+
+  const handleNextEvent = (nextEvent) => {
+  	let nextEventInfo = accurateInterval(() => {
+          getNextEvent();
+        }, nextEvent)
+    eventTimeoutRef.current = nextEventInfo;
+    //console.log(eventTimeoutRef.current);
+  }
+
+  const getNextEvent = () => {
+  	fetch('http://www.virtual-pet.uk/v1/event')
+	    .then(response=> response.json())
+	    .then(data => {
+	    	console.log(data);
+	    	setHealth((prev) => stayInRange(prev + data.impact.health));
+			setHunger((prev) => stayInRange(prev + data.impact.hunger));
+			setHappiness((prev) => stayInRange(prev + data.impact.happiness));
+			handleOpenBanner(data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness);
+			if (eventTimeoutRef.current) {
+		      eventTimeoutRef.current.cancel();
+		    }
+		    handleNextEvent(data.nextEvent * 1000); //TO-DO: 1000 must be replaced by day value
+		    setBannerOpen(false);
+	     })
+	    .catch(error => console.log(error)) //TODO: handle edge-case of API error
+  }
 
  const petDay = () => {
 	setAge((prev) => prev + 1);
@@ -116,16 +108,24 @@ const classes = useStyles();
   	}
   }
 
+
   const resetGame = () => {
   	setAge(0);
 	setHealth(100);
 	setHunger(0);
 	setHappiness(100);
+	//Cancel timers
 	if (timeoutRef.current) {
       timeoutRef.current.cancel();
     }
+    if (eventTimeoutRef.current) {
+	  eventTimeoutRef.current.cancel();
+	}
     setGameEnd(false);
+    setBannerOpen(false);
+    //Start life and program first event
     beginLife();
+    handleNextEvent(5000);
   }
 
   //Helper functions
@@ -142,6 +142,11 @@ const classes = useStyles();
     setDialogOpen(false);
   };
 
+  const handleOpenBanner = useCallback((text) => StaticBanner.show({
+	    icon: <div />,
+	    open:  bannerOpen,
+	    label: text,
+   }), [bannerOpen]);
 
   //Effects
 
@@ -149,10 +154,15 @@ const classes = useStyles();
    if (health <= 0 ) {
    	 setGameEnd(true);
    	 setDialogOpen(true);
+   	 setBannerOpen(false);
    	 //stop the life timer...
    	 if (timeoutRef.current) {
       timeoutRef.current.cancel();
-    }
+     }
+     //Stop the event timer...
+	 if (eventTimeoutRef.current) {
+	  eventTimeoutRef.current.cancel();
+	 }
    }
   }, [health]);
 
@@ -162,13 +172,14 @@ const classes = useStyles();
 	}
   }, [petName]);
 
-  // Equivalent to componentDidMount(). Starts the Life timer. Runs only once.
+  // Equivalent to componentDidMount(). Starts the Life timer and handles first event. Runs only once.
   // eslint-disable-next-line
-  useEffect(() => {beginLife()}, []);
+  useEffect(() => {beginLife(); handleNextEvent(5000)}, []);
 
   return (
   	<React.Fragment>
   	   <CssBaseline />
+  	   <StaticBanner open={bannerOpen} />
 		<Grid container component="main" className={classes.root}>
 	      <Paper className={classes.paper}>
 	        <Grid container spacing={2}>
@@ -203,7 +214,7 @@ const classes = useStyles();
 	            </Grid>
 	          </Grid>
 	          <Grid item xs={12} sm={12} md={6}>
-	              <img className={classes.img} alt={name} src={welcomePet} />
+	              <Character name={name} happiness={happiness} age={age} health={health} />
 	          </Grid>    
 	        </Grid>
 	      </Paper>
