@@ -6,14 +6,13 @@ import Welcome from './containers/Welcome';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  
    <HashRouter>
 		<Switch>
            <Route exact path="/" component={Welcome} />
            <Route path="/play/:petName?" component={App} />
         </Switch>
-	</HashRouter>
-  </React.StrictMode>,
+	</HashRouter>,
   document.getElementById('root')
 );
 
