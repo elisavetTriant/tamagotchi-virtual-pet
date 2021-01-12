@@ -1,30 +1,32 @@
 {
   "files": {
-    "main.js": "/tamagotchi-virtual-pet/static/js/main.9f650593.chunk.js",
-    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.9f650593.chunk.js.map",
+    "main.js": "/tamagotchi-virtual-pet/static/js/main.8ce5be85.chunk.js",
+    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.8ce5be85.chunk.js.map",
     "runtime-main.js": "/tamagotchi-virtual-pet/static/js/runtime-main.6fe98d80.js",
     "runtime-main.js.map": "/tamagotchi-virtual-pet/static/js/runtime-main.6fe98d80.js.map",
-    "static/js/2.9309dfaa.chunk.js": "/tamagotchi-virtual-pet/static/js/2.9309dfaa.chunk.js",
-    "static/js/2.9309dfaa.chunk.js.map": "/tamagotchi-virtual-pet/static/js/2.9309dfaa.chunk.js.map",
+    "static/js/2.a9f799f3.chunk.js": "/tamagotchi-virtual-pet/static/js/2.a9f799f3.chunk.js",
+    "static/js/2.a9f799f3.chunk.js.map": "/tamagotchi-virtual-pet/static/js/2.a9f799f3.chunk.js.map",
     "static/js/3.34f8ee21.chunk.js": "/tamagotchi-virtual-pet/static/js/3.34f8ee21.chunk.js",
     "static/js/3.34f8ee21.chunk.js.map": "/tamagotchi-virtual-pet/static/js/3.34f8ee21.chunk.js.map",
     "index.html": "/tamagotchi-virtual-pet/index.html",
-    "static/js/2.9309dfaa.chunk.js.LICENSE.txt": "/tamagotchi-virtual-pet/static/js/2.9309dfaa.chunk.js.LICENSE.txt",
-    "static/media/born-pet.153e1bf9.svg": "/tamagotchi-virtual-pet/static/media/born-pet.153e1bf9.svg",
-    "static/media/dead-pet.a5c7f1b5.svg": "/tamagotchi-virtual-pet/static/media/dead-pet.a5c7f1b5.svg",
-    "static/media/disaster-pet.4ece71f2.svg": "/tamagotchi-virtual-pet/static/media/disaster-pet.4ece71f2.svg",
-    "static/media/exercise-pet.c3b2a3b4.svg": "/tamagotchi-virtual-pet/static/media/exercise-pet.c3b2a3b4.svg",
-    "static/media/food-pet.886e478e.svg": "/tamagotchi-virtual-pet/static/media/food-pet.886e478e.svg",
-    "static/media/happy-pet.0073bfbc.svg": "/tamagotchi-virtual-pet/static/media/happy-pet.0073bfbc.svg",
-    "static/media/mischief-pet.e1412e66.svg": "/tamagotchi-virtual-pet/static/media/mischief-pet.e1412e66.svg",
-    "static/media/sad-pet.746e9375.svg": "/tamagotchi-virtual-pet/static/media/sad-pet.746e9375.svg",
-    "static/media/sick-pet.f617f147.svg": "/tamagotchi-virtual-pet/static/media/sick-pet.f617f147.svg",
-    "static/media/tricks-pet.c92e9531.svg": "/tamagotchi-virtual-pet/static/media/tricks-pet.c92e9531.svg",
-    "static/media/welcome-pet.3b345dac.svg": "/tamagotchi-virtual-pet/static/media/welcome-pet.3b345dac.svg"
+    "static/js/2.a9f799f3.chunk.js.LICENSE.txt": "/tamagotchi-virtual-pet/static/js/2.a9f799f3.chunk.js.LICENSE.txt",
+    "static/media/born-pet.795e4fb5.svg": "/tamagotchi-virtual-pet/static/media/born-pet.795e4fb5.svg",
+    "static/media/crying-pet.1173674d.svg": "/tamagotchi-virtual-pet/static/media/crying-pet.1173674d.svg",
+    "static/media/dead-pet.4e5c176a.svg": "/tamagotchi-virtual-pet/static/media/dead-pet.4e5c176a.svg",
+    "static/media/disaster-pet.66e47975.svg": "/tamagotchi-virtual-pet/static/media/disaster-pet.66e47975.svg",
+    "static/media/exercise-pet.75910bf6.svg": "/tamagotchi-virtual-pet/static/media/exercise-pet.75910bf6.svg",
+    "static/media/food-pet.9caf0685.svg": "/tamagotchi-virtual-pet/static/media/food-pet.9caf0685.svg",
+    "static/media/happy-pet.37a25a85.svg": "/tamagotchi-virtual-pet/static/media/happy-pet.37a25a85.svg",
+    "static/media/love-pet.ac68afd2.svg": "/tamagotchi-virtual-pet/static/media/love-pet.ac68afd2.svg",
+    "static/media/mischief-pet.8eb9f2c1.svg": "/tamagotchi-virtual-pet/static/media/mischief-pet.8eb9f2c1.svg",
+    "static/media/sad-pet.f8da9027.svg": "/tamagotchi-virtual-pet/static/media/sad-pet.f8da9027.svg",
+    "static/media/sick-pet.756362e5.svg": "/tamagotchi-virtual-pet/static/media/sick-pet.756362e5.svg",
+    "static/media/tricks-pet.bed47d2e.svg": "/tamagotchi-virtual-pet/static/media/tricks-pet.bed47d2e.svg",
+    "static/media/welcome-pet.2e06b49f.svg": "/tamagotchi-virtual-pet/static/media/welcome-pet.2e06b49f.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.6fe98d80.js",
-    "static/js/2.9309dfaa.chunk.js",
-    "static/js/main.9f650593.chunk.js"
+    "static/js/2.a9f799f3.chunk.js",
+    "static/js/main.8ce5be85.chunk.js"
   ]
 }
