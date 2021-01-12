@@ -1,14 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import bornPet from '../assets/character/born-pet.svg';
 import deadPet from '../assets/character/dead-pet.svg';
-import disasterPet from '../assets/character/disaster-pet.svg';
-import exercisePet from '../assets/character/exercise-pet.svg';
-import foodPet from '../assets/character/food-pet.svg';
 import happyPet from '../assets/character/happy-pet.svg';
-import mischiefPet from '../assets/character/mischief-pet.svg';
+import lovePet from '../assets/character/love-pet.svg';
 import sadPet from '../assets/character/sad-pet.svg';
-import sickPet from '../assets/character/sick-pet.svg';
-import tricksPet from '../assets/character/tricks-pet.svg';
+import cryingPet from '../assets/character/crying-pet.svg';
 import welcomePet from '../assets/character/welcome-pet.svg';
 import { makeStyles } from '@material-ui/core/styles';
 import Zoom from '@material-ui/core/Zoom';
@@ -34,7 +30,7 @@ export default function Character(props) {
 
   useEffect(() => {
     //Preloading character assets
-    const imageList = [bornPet, deadPet, disasterPet, exercisePet, foodPet, happyPet, mischiefPet, sadPet, sickPet, tricksPet, welcomePet]
+    const imageList = [bornPet, deadPet, happyPet, sadPet, welcomePet, lovePet, cryingPet]
     imageList.forEach((image) => {
         new Image().src = image
     });
@@ -43,12 +39,16 @@ export default function Character(props) {
   useEffect(() => {
     if (props.age === 0) {
        setSrc(bornPet)
-    }else if (props.age > 3) {
-      if (props.happiness >= 70) {   
+    } else if (props.age > 3) {
+      if (props.happiness >= 70 && props.happiness <= 90) {   
         setSrc(happyPet)
-      }else if (props.happiness <= 30){
+      } else if (props.happiness <= 30 && props.happiness > 0){
         setSrc(sadPet)
-      }else {
+      } else if (props.happiness > 90){
+        setSrc(lovePet)
+      } else if (props.happiness === 0) {
+        setSrc(cryingPet)
+      } else {
         setSrc(welcomePet)
       }
     }

@@ -1,4 +1,11 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import disasterPet from '../assets/character/disaster-pet.svg';
+import exercisePet from '../assets/character/exercise-pet.svg';
+import foodPet from '../assets/character/food-pet.svg';
+import mischiefPet from '../assets/character/mischief-pet.svg';
+import sickPet from '../assets/character/sick-pet.svg';
+import tricksPet from '../assets/character/tricks-pet.svg';
+import welcomePet from '../assets/character/welcome-pet.svg';
 import {useParams} from 'react-router-dom';
 import {accurateInterval} from '../utils/helpers.js';
 import Copyright from '../components/Copyright';
@@ -18,6 +25,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { StaticBanner } from 'material-ui-banner';
 import { makeStyles } from '@material-ui/core/styles';
 
+
 const useStyles = makeStyles((theme) => ({
  root: {
     flexGrow: 1,
@@ -29,8 +37,52 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     margin: '2rem auto',
     maxWidth: 680,
+  },
+  avatarLarge: {
+  	width: 72,
+    height: 72,
   }
   }));
+
+//Helper functions
+ const stayInRange = (stat) => {
+  	if (stat >= 0 && stat <= 100)
+	    return stat;
+	 else if (stat > 100)
+	    return 100;
+	else
+	    return 0;
+  }
+
+const getCharacter = (eventType) => {
+  
+  let eventGraphic;
+
+  switch(eventType) {
+	case 'Natural Disaster':
+		eventGraphic = disasterPet;
+		break;
+	case 'Food':
+		eventGraphic = foodPet;
+		break;
+	case 'Mischief':
+		eventGraphic = mischiefPet;
+		break;
+	case 'Disease':
+		eventGraphic = sickPet;
+		break;
+	case 'Tricks':
+		eventGraphic = tricksPet;
+		break;
+	case 'Exercise':
+		eventGraphic = exercisePet;
+		break;
+	default:
+		eventGraphic = welcomePet;
+	}
+
+	return eventGraphic;
+}
 
 
 export default function App() {
@@ -42,7 +94,6 @@ const [hunger, setHunger] = useState(0);
 const [happiness, setHappiness] = useState(100);
 const [gameEnd, setGameEnd] = useState(false);
 const [dialogOpen, setDialogOpen] = useState(false);
-const [bannerOpen, setBannerOpen] = useState(false);
 const timeoutRef = useRef();
 const eventTimeoutRef = useRef();
 const {petName} = useParams();
@@ -66,21 +117,21 @@ const classes = useStyles();
   }
 
   const getNextEvent = () => {
-  	fetch('http://www.virtual-pet.uk/v1/event')
-	    .then(response=> response.json())
-	    .then(data => {
-	    	console.log(data);
-	    	setHealth((prev) => stayInRange(prev + data.impact.health));
+  	
+	fetch('https://www.virtual-pet.uk/v1/event')
+		.then(response=> response.json())
+		.then(data => {
+		    //console.log(data);
+		    setHealth((prev) => stayInRange(prev + data.impact.health));
 			setHunger((prev) => stayInRange(prev + data.impact.hunger));
 			setHappiness((prev) => stayInRange(prev + data.impact.happiness));
-			handleOpenBanner(data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness);
+			handleOpenBanner(data.type.toUpperCase() + "! " + data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness, getCharacter(data.type));
 			if (eventTimeoutRef.current) {
-		      eventTimeoutRef.current.cancel();
-		    }
-		    handleNextEvent(data.nextEvent * 1000); //TO-DO: 1000 must be replaced by day value
-		    setBannerOpen(false);
-	     })
-	    .catch(error => console.log(error)) //TODO: handle edge-case of API error
+			    eventTimeoutRef.current.cancel();
+			 }
+			handleNextEvent(data.nextEvent * 1000); //TO-DO: 1000 must be replaced by day value
+		 })
+		 .catch(error => console.log(error)) //TODO: handle edge-case of API error
   }
 
  const petDay = () => {
@@ -109,11 +160,12 @@ const classes = useStyles();
   }
 
 
-  const resetGame = () => {
+  const resetGame = () => {  	
   	setAge(0);
 	setHealth(100);
 	setHunger(0);
 	setHappiness(100);
+	setGameEnd(false);
 	//Cancel timers
 	if (timeoutRef.current) {
       timeoutRef.current.cancel();
@@ -121,40 +173,30 @@ const classes = useStyles();
     if (eventTimeoutRef.current) {
 	  eventTimeoutRef.current.cancel();
 	}
-    setGameEnd(false);
-    setBannerOpen(false);
     //Start life and program first event
     beginLife();
     handleNextEvent(5000);
-  }
-
-  //Helper functions
-  const stayInRange = (stat) => {
-  	if (stat >= 0 && stat <= 100)
-	    return stat;
-	 else if (stat > 100)
-	    return 100;
-	else
-	    return 0;
   }
 
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
 
-  const handleOpenBanner = useCallback((text) => StaticBanner.show({
-	    icon: <div />,
-	    open:  bannerOpen,
+  const handleOpenBanner = useCallback((text, eventTypeGraphic) => StaticBanner.show({
+  		icon: <div />,
+  		iconProps : {
+  			src: eventTypeGraphic,
+  			className:  classes.avatarLarge
+  		},
+	    open:  true,
 	    label: text,
-   }), [bannerOpen]);
+   }), [classes.avatarLarge]);
 
   //Effects
 
   useEffect(() => {
-   if (health <= 0 ) {
-   	 setGameEnd(true);
+   if (health <= 0 ) {   	 
    	 setDialogOpen(true);
-   	 setBannerOpen(false);
    	 //stop the life timer...
    	 if (timeoutRef.current) {
       timeoutRef.current.cancel();
@@ -163,6 +205,7 @@ const classes = useStyles();
 	 if (eventTimeoutRef.current) {
 	  eventTimeoutRef.current.cancel();
 	 }
+	 setGameEnd(true);
    }
   }, [health]);
 
@@ -179,11 +222,11 @@ const classes = useStyles();
   return (
   	<React.Fragment>
   	   <CssBaseline />
-  	   <StaticBanner open={bannerOpen} />
+  	   <StaticBanner />
 		<Grid container component="main" className={classes.root}>
 	      <Paper className={classes.paper}>
 	        <Grid container spacing={2}>
-	          <Grid item xs={12} sm={12} md={6} container>
+	          <Grid item xs={8} sm={8} md={6} container>
 	            <Grid item xs container direction="column" spacing={2}>
 	              <Grid item xs>
 	                <Typography variant="h2">
@@ -209,11 +252,11 @@ const classes = useStyles();
 					  <Button disabled={gameEnd} onClick={feedPet}>Feed</Button>
 					  <Button disabled={gameEnd} onClick={playPet}>Play</Button>
 					</ButtonGroup>
-			  		<Button disabled={gameEnd} onClick={resetGame}>Reset Game</Button>
+			  		<Button onClick={resetGame}>{gameEnd? "Play again!" : "Reset Game"}</Button>
 	              </Grid>
 	            </Grid>
 	          </Grid>
-	          <Grid item xs={12} sm={12} md={6}>
+	          <Grid item xs={4} sm={4} md={6}>
 	              <Character name={name} happiness={happiness} age={age} health={health} />
 	          </Grid>    
 	        </Grid>
@@ -227,7 +270,7 @@ const classes = useStyles();
 		        aria-labelledby="alert-dialog-title"
 		        aria-describedby="alert-dialog-description"
 		      >
-		        <DialogTitle id="alert-dialog-title">Game Over!</DialogTitle>
+		        <DialogTitle id="alert-dialog-title">Game Over.</DialogTitle>
 		        <DialogContent>
 		          <DialogContentText id="alert-dialog-description">
 		           Great job! Let's play again!
