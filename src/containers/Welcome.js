@@ -57,7 +57,7 @@ export default function Welcome() {
     event.preventDefault()
 
     if (nameValue !== '') {
-      history.push('/play/' + nameValue);
+      history.push('/play/' + nameValue.toString());
     }
   }  
 

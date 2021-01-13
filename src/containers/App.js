@@ -169,9 +169,11 @@ const classes = useStyles();
 	//Cancel timers
 	if (timeoutRef.current) {
       timeoutRef.current.cancel();
+      timeoutRef.current = null;
     }
     if (eventTimeoutRef.current) {
 	  eventTimeoutRef.current.cancel();
+	  eventTimeoutRef.current = null;
 	}
     //Start life and program first event
     beginLife();
