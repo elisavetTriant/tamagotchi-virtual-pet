@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/tamagotchi-virtual-pet/static/js/main.8ce5be85.chunk.js",
-    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.8ce5be85.chunk.js.map",
+    "main.js": "/tamagotchi-virtual-pet/static/js/main.49b81871.chunk.js",
+    "main.js.map": "/tamagotchi-virtual-pet/static/js/main.49b81871.chunk.js.map",
     "runtime-main.js": "/tamagotchi-virtual-pet/static/js/runtime-main.6fe98d80.js",
     "runtime-main.js.map": "/tamagotchi-virtual-pet/static/js/runtime-main.6fe98d80.js.map",
     "static/js/2.a9f799f3.chunk.js": "/tamagotchi-virtual-pet/static/js/2.a9f799f3.chunk.js",
@@ -27,6 +27,6 @@
   "entrypoints": [
     "static/js/runtime-main.6fe98d80.js",
     "static/js/2.a9f799f3.chunk.js",
-    "static/js/main.8ce5be85.chunk.js"
+    "static/js/main.49b81871.chunk.js"
   ]
 }
