@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "My Virtual Pet",
+  "name": "Tamagotchi Inspired Virtual Pet Game. Created using create-react-app.",
   "icons": [
     {
       "src": "favicon.ico",
