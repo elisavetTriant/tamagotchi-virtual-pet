@@ -109,29 +109,36 @@ const classes = useStyles();
  }
 
   const handleNextEvent = (nextEvent) => {
-  	let nextEventInfo = accurateInterval(() => {
-          getNextEvent();
-        }, nextEvent)
-    eventTimeoutRef.current = nextEventInfo;
-    //console.log(eventTimeoutRef.current);
+  	/*timeoutRef.current is null when starting a new game. 
+  	This condition also keeps the app from fetching when the game has ended
+  	*/
+  	if (timeoutRef.current !== null) {
+	  	let nextEventInfo = accurateInterval(() => {
+	          getNextEvent();
+	        }, nextEvent)
+	    eventTimeoutRef.current = nextEventInfo;
+    	//console.log(eventTimeoutRef.current);
+    }
   }
 
   const getNextEvent = () => {
   	
-	fetch('https://www.virtual-pet.uk/v1/event')
-		.then(response=> response.json())
-		.then(data => {
-		    //console.log(data);
-		    setHealth((prev) => stayInRange(prev + data.impact.health));
-			setHunger((prev) => stayInRange(prev + data.impact.hunger));
-			setHappiness((prev) => stayInRange(prev + data.impact.happiness));
-			handleOpenBanner(data.type.toUpperCase() + "! " + data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness, getCharacter(data.type));
-			if (eventTimeoutRef.current) {
-			    eventTimeoutRef.current.cancel();
-			 }
-			handleNextEvent(data.nextEvent * 1000); //TO-DO: 1000 must be replaced by day value
-		 })
-		 .catch(error => console.log(error)) //TODO: handle edge-case of API error
+		fetch('https://www.virtual-pet.uk/v1/event')
+			.then(response=> response.json())
+			.then(data => {
+			    //console.log(data);
+			    setHealth((prev) => stayInRange(prev + data.impact.health));
+				setHunger((prev) => stayInRange(prev + data.impact.hunger));
+				setHappiness((prev) => stayInRange(prev + data.impact.happiness));
+				handleOpenBanner(data.type.toUpperCase() + "! " + data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness, getCharacter(data.type));
+				if (eventTimeoutRef.current) {
+				    eventTimeoutRef.current.cancel();
+				    eventTimeoutRef.current = null;
+				 }
+				handleNextEvent(data.nextEvent * 1000); //TO-DO: 1000 must be replaced by day value
+			 })
+			 .catch(error => console.log(error)) //TODO: handle edge-case of API error
+  	
   }
 
  const petDay = () => {
@@ -161,23 +168,13 @@ const classes = useStyles();
 
 
   const resetGame = () => {  	
+  	
   	setAge(0);
 	setHealth(100);
 	setHunger(0);
 	setHappiness(100);
 	setGameEnd(false);
-	//Cancel timers
-	if (timeoutRef.current) {
-      timeoutRef.current.cancel();
-      timeoutRef.current = null;
-    }
-    if (eventTimeoutRef.current) {
-	  eventTimeoutRef.current.cancel();
-	  eventTimeoutRef.current = null;
-	}
-    //Start life and program first event
-    beginLife();
-    handleNextEvent(5000);
+
   }
 
   const handleDialogClose = () => {
@@ -194,19 +191,12 @@ const classes = useStyles();
 	    label: text,
    }), [classes.avatarLarge]);
 
+  
   //Effects
 
   useEffect(() => {
    if (health <= 0 ) {   	 
    	 setDialogOpen(true);
-   	 //stop the life timer...
-   	 if (timeoutRef.current) {
-      timeoutRef.current.cancel();
-     }
-     //Stop the event timer...
-	 if (eventTimeoutRef.current) {
-	  eventTimeoutRef.current.cancel();
-	 }
 	 setGameEnd(true);
    }
   }, [health]);
@@ -217,9 +207,22 @@ const classes = useStyles();
 	}
   }, [petName]);
 
-  // Equivalent to componentDidMount(). Starts the Life timer and handles first event. Runs only once.
-  // eslint-disable-next-line
-  useEffect(() => {beginLife(); handleNextEvent(5000)}, []);
+  useEffect(() => {
+  	if (!gameEnd) {
+	  	beginLife(); 
+	  	handleNextEvent(5 * 1000); //TO-DO: 1000 must be replaced by day value
+  	} else {
+  		//Cancel timers
+		if (timeoutRef.current) {
+	      timeoutRef.current.cancel();
+	      timeoutRef.current = null;
+	    }
+	    if (eventTimeoutRef.current) {
+		  eventTimeoutRef.current.cancel();
+		  eventTimeoutRef.current = null;
+		}
+  	}
+  }, [gameEnd]);
 
   return (
   	<React.Fragment>

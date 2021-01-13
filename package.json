@@ -1,6 +1,6 @@
 {
   "name": "tamagotchi-virtual-pet",
-  "version": "0.3.1",
+  "version": "0.4.1",
   "private": true,
   "homepage": "https://elisavetTriant.github.io/tamagotchi-virtual-pet",
   "dependencies": {
