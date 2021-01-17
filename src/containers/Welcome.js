@@ -43,22 +43,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const dayDurationInputProps = {
+  step: 1,
+  min: 1,
+  max: 60,
+};
+
 export default function Welcome() {
   const history = useHistory();
   const classes = useStyles();
-  const [nameValue, setNameValue] = useState('');
+  const [nameValue, setNameValue] = useState('Pippin');
+  const [dayDurationValue, setDayDurationValue] = useState(5);
 
   
- const handleChange = (event) => {
+ const handleNameChange = (event) => {
     setNameValue(event.target.value);
+ }
+
+ const handleDayDurationChange = (event) => {
+    setDayDurationValue(event.target.value);
  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    if (nameValue !== '') {
-      history.push('/play/' + nameValue.toString());
+    if (nameValue !== '' && dayDurationValue !== '') {
+      history.push('/play/' + encodeURIComponent(nameValue) + "/" + dayDurationValue);
     }
+
   }  
 
   return (
@@ -70,7 +82,7 @@ export default function Welcome() {
           <Avatar className={classes.avatar}>
           </Avatar>
           <Typography component="h1" variant="h5">
-            Start your game by giving your pet a name!
+            Start your game by giving your pet a name and setting the speed!
           </Typography>
           <form className={classes.form} onSubmit={handleSubmit} method="post">
             <TextField
@@ -83,7 +95,21 @@ export default function Welcome() {
               name="name"
               autoComplete="name"
               autoFocus
-              value={nameValue} onChange={handleChange}
+              value={nameValue} 
+              onChange={handleNameChange}
+            />
+            <TextField
+              id="day-duration"
+              label="Day Duration (in seconds)"
+              variant="outlined"
+              type="number"
+              defaultValue={dayDurationValue}
+              inputProps={dayDurationInputProps}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleDayDurationChange}
             />
             <Button
               type="submit"

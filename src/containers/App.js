@@ -45,6 +45,21 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 //Helper functions
+ 
+ function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response)
+  } else if (response.status === 429){
+    return Promise.resolve(response)
+  }else {
+    return Promise.reject(new Error(response.statusText))
+  }
+ }
+
+ function json(response) {
+  return response.json()
+ }
+
  const stayInRange = (stat) => {
   	if (stat >= 0 && stat <= 100)
 	    return stat;
@@ -88,6 +103,7 @@ const getCharacter = (eventType) => {
 export default function App() {
 
 const [name, setName] = useState('Pippin');
+const [dayDuration, setDayDuration] = useState(1000); //in miliseconds
 const [age, setAge] = useState(0);
 const [health, setHealth] = useState(100);
 const [hunger, setHunger] = useState(0);
@@ -96,14 +112,15 @@ const [gameEnd, setGameEnd] = useState(false);
 const [dialogOpen, setDialogOpen] = useState(false);
 const timeoutRef = useRef();
 const eventTimeoutRef = useRef();
-const {petName} = useParams();
 const classes = useStyles();
+const {petName, dayDurationInSeconds} = useParams();
+
 
 
  const beginLife = () => {
     let timeOutInfo = accurateInterval(() => {
           petDay();
-        }, 1000) //TODO: Updatable day time - defaults to 1 sec 
+        }, dayDuration) 
     timeoutRef.current = timeOutInfo;
     //console.log(timeoutRef.current)
  }
@@ -124,21 +141,33 @@ const classes = useStyles();
   const getNextEvent = () => {
   	
 		fetch('https://www.virtual-pet.uk/v1/event')
-			.then(response=> response.json())
-			.then(data => {
-			    //console.log(data);
-			    setHealth((prev) => stayInRange(prev + data.impact.health));
-				setHunger((prev) => stayInRange(prev + data.impact.hunger));
-				setHappiness((prev) => stayInRange(prev + data.impact.happiness));
-				handleOpenBanner(data.type.toUpperCase() + "! " + data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness, getCharacter(data.type));
-				if (eventTimeoutRef.current) {
-				    eventTimeoutRef.current.cancel();
-				    eventTimeoutRef.current = null;
-				 }
-				handleNextEvent(data.nextEvent * 1000); //TO-DO: 1000 must be replaced by day value
-			 })
-			 .catch(error => console.log(error)) //TODO: handle edge-case of API error
-  	
+			.then(status)
+			.then(json)
+			.then(function(data) {
+			    if(data.type === 'Error'){
+			    	 console.log('Request failed', data);
+			    	 if (eventTimeoutRef.current) {
+						    eventTimeoutRef.current.cancel();
+						    eventTimeoutRef.current = null;
+						 }
+			    	 handleNextEvent(data.nextEvent * dayDuration);
+			    } else {
+			    	console.log('Request succeeded with JSON response', data);
+				    setHealth((prev) => stayInRange(prev + data.impact.health));
+					setHunger((prev) => stayInRange(prev + data.impact.hunger));
+					setHappiness((prev) => stayInRange(prev + data.impact.happiness));
+					handleOpenBanner(data.type.toUpperCase() + "! " + data.title + ": " + data.description + " Impact, health: " + data.impact.health + " hunger: " + data.impact.hunger + " happiness: " + data.impact.happiness, getCharacter(data.type));
+					if (eventTimeoutRef.current) {
+						    eventTimeoutRef.current.cancel();
+						    eventTimeoutRef.current = null;
+						 }
+					handleNextEvent(data.nextEvent * dayDuration); 
+				}			    	
+
+			 }).catch(function(error) {
+			    console.log('Request failed', error);
+			 });
+		  	
   }
 
  const petDay = () => {
@@ -167,16 +196,15 @@ const classes = useStyles();
   }
 
 
-  const resetGame = () => {  	
-  	
+  const resetGame = () => {  	  	
   	setAge(0);
 	setHealth(100);
 	setHunger(0);
 	setHappiness(100);
 	setGameEnd(false);
-
   }
 
+  //helper functions
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
@@ -191,6 +219,19 @@ const classes = useStyles();
 	    label: text,
    }), [classes.avatarLarge]);
 
+  const cleanup = () => {
+     //Cancel timers
+		if (timeoutRef.current) {
+	      timeoutRef.current.cancel();
+	      
+	    }
+	    if (eventTimeoutRef.current) {
+		  eventTimeoutRef.current.cancel();
+		}
+
+		timeoutRef.current = null;
+		eventTimeoutRef.current = null;
+   }
   
   //Effects
 
@@ -202,27 +243,36 @@ const classes = useStyles();
   }, [health]);
 
   useEffect(() => {
-	if (petName !== undefined) {
-	 setName(petName)
-	}
-  }, [petName]);
-
-  useEffect(() => {
-  	if (!gameEnd) {
-	  	beginLife(); 
-	  	handleNextEvent(5 * 1000); //TO-DO: 1000 must be replaced by day value
-  	} else {
-  		//Cancel timers
-		if (timeoutRef.current) {
-	      timeoutRef.current.cancel();
-	      timeoutRef.current = null;
-	    }
-	    if (eventTimeoutRef.current) {
-		  eventTimeoutRef.current.cancel();
-		  eventTimeoutRef.current = null;
+  	if (!gameEnd) { 		
+  		
+  		if (petName !== undefined) {
+			 setName(decodeURIComponent(petName))
 		}
+
+		if (dayDurationInSeconds !== undefined && !Number.isNaN(parseInt(dayDurationInSeconds)) ) {
+		   let inputedDuration = parseInt(dayDurationInSeconds)
+		   if (inputedDuration<=0){
+		  	 setDayDuration(1000);
+		   } else if (inputedDuration > 60) {
+		  	 setDayDuration(60*1000);
+		   } else {
+		  	 setDayDuration(inputedDuration*1000);
+		   }  
+		} else {
+			setDayDuration(1000);
+		}
+
+	  	beginLife(); 
+
+	  	handleNextEvent(5 * dayDuration);
+
+  	} else {
+  		cleanup();
   	}
-  }, [gameEnd]);
+
+  	return cleanup;
+
+  }, [gameEnd, petName, dayDurationInSeconds, dayDuration]);
 
   return (
   	<React.Fragment>

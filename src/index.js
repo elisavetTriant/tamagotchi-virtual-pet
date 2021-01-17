@@ -10,7 +10,7 @@ ReactDOM.render(
    <HashRouter>
 		<Switch>
            <Route exact path="/" component={Welcome} />
-           <Route path="/play/:petName?" component={App} />
+           <Route path="/play/:petName?/:dayDurationInSeconds?" component={App} />
         </Switch>
 	</HashRouter>,
   document.getElementById('root')
